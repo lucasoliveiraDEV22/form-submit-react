@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import FormInput from './FormInput'
-import SelectInput from './SelectInput'
+
 
 const AddressForm = ({ register, errors }) => {
   return (
@@ -30,18 +30,7 @@ const AddressForm = ({ register, errors }) => {
         register={register}
         errors={errors}
       />
-      <SelectInput
-        label="Estado"
-        name="state"
-        register={register}
-        errors={errors}
-        options={[
-          { label: 'SP', value: 'sp' },
-          { label: 'RJ', value: 'rj' },
-          { label: 'MG', value: 'mg' },
-          { label: 'BA', value: 'ba' }
-        ]}
-      />
+ 
     </Box>
   )
 }

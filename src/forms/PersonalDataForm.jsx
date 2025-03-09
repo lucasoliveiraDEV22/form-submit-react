@@ -1,8 +1,10 @@
-import { Box } from '@mui/material'
+import { Box, Container } from '@mui/material'
+import { useState } from 'react'
 import AddressForm from '../components/AddressForm'
 import Button from '../components/Button'
 import DatePickerComponent from '../components/DatePicker'
 import FormInput from '../components/FormInput'
+import MaskedInput from '../components/MaskedInput'
 import SelectInput from '../components/SelectInput'
 import useFormValidation from '../hooks/useFormValidation'
 
@@ -45,82 +47,88 @@ const PersonalDataForm = () => {
     formState: { errors }
   } = useFormValidation()
 
-  const documentType = watch('documentType')
+  const [documentType, setDocumentType] = useState('') // Estado para controlar a seleção de RG ou CPF
 
   const onSubmit = data => {
     console.log('Dados do Formulário:', data)
   }
 
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-      <h2>Dados Pessoais</h2>
-      <FormInput
-        label="Nome Completo"
-        name="name"
-        register={register}
-        errors={errors}
-      />
-      <DatePickerComponent
-        label="Data de Nascimento"
-        name="birthDate"
-        control={control}
-        errors={errors}
-      />
-      <SelectInput
-        label="Documento"
-        name="document"
-        register={register}
-        errors={errors}
-        options={[
-          { label: 'RG', value: 'rg' },
-          { label: 'CPF', value: 'cpf' }
-        ]}
-      />
-      {documentType && (
+    <Container maxWidth="sm">
+      {' '}
+      {/* Adicionando um container centralizado */}
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ p: 3, bgcolor: "#F9F9F9", borderRadius: 2, boxShadow: 3 }}>
+        <h2>Dados Pessoais</h2>
         <FormInput
-          label={documentType === 'cpf' ? 'CPF' : 'RG'}
-          name="document"
+          label="Nome Completo"
+          name="name"
           register={register}
           errors={errors}
         />
-      )}
-      <FormInput
-        label="Telefone"
-        name="phone"
-        register={register}
-        errors={errors}
-      />
-      <FormInput
-        label="E-mail"
-        name="email"
-        register={register}
-        errors={errors}
-      />
-      <FormInput
-        label="Nome do Pai"
-        name="fatherName"
-        register={register}
-        errors={errors}
-      />
-      <FormInput
-        label="Nome da Mãe"
-        name="motherName"
-        register={register}
-        errors={errors}
-      />
+        <DatePickerComponent
+          label="Data de Nascimento"
+          name="birthDate"
+          control={control}
+          errors={errors}
+        />
+        <SelectInput
+          label="Tipo de Documento"
+          name="documentType"
+          register={register}
+          errors={errors}
+          options={[
+            { label: 'RG', value: 'rg' },
+            { label: 'CPF', value: 'cpf' }
+          ]}
+          onChange={e => setDocumentType(e.target.value)} // Atualiza o estado ao selecionar
+        />
+        {documentType && (
+          <MaskedInput
+            label={documentType === 'cpf' ? 'CPF' : 'RG'}
+            name="document"
+            register={register}
+            errors={errors}
+            mask={documentType === 'cpf' ? '999.999.999-99' : '99.999.999-9'}
+          />
+        )}
+        <FormInput
+          label="Telefone"
+          name="phone"
+          register={register}
+          errors={errors}
+        />
+        <FormInput
+          label="E-mail"
+          name="email"
+          register={register}
+          errors={errors}
+        />
+        <FormInput
+          label="Nome do Pai"
+          name="fatherName"
+          register={register}
+          errors={errors}
+        />
+        <FormInput
+          label="Nome da Mãe"
+          name="motherName"
+          register={register}
+          errors={errors}
+        />
 
-      <AddressForm register={register} errors={errors} />
+        <AddressForm register={register} errors={errors} />
 
-      <SelectInput
-        label="Estado"
-        name="state"
-        register={register}
-        errors={errors}
-        options={estadosBrasil}
-      />
-      <Button text="Enviar" type="submit" />
-      <Button text="Cancelar" type="button" variant="outlined" />
-    </Box>
+        <SelectInput
+          label="Estado"
+          name="state"
+          register={register}
+          errors={errors}
+          options={estadosBrasil}
+        />
+        <Button text="Enviar" type="submit" />
+        <Button text="Cancelar" type="button" variant="outlined" />
+      </Box>
+    </Container>
   )
 }
 
